@@ -1,0 +1,23 @@
+var NUMBER_OF_VISITTED_KEY="NUMBER_OF_VISITTED";var MOBILE_APP_DONE_INTRODUCED_KEY="MOBILE_APP_V1_9_8_DONE_INTRODUCED_KEY";var numberOfVisitted=0;var app_url='https://itunes.apple.com/app/paste-keyboard-copy-keyboard/id1570011952';if(localStorage.getItem(NUMBER_OF_VISITTED_KEY)!=null){numberOfVisitted=parseInt(localStorage.getItem(NUMBER_OF_VISITTED_KEY));}
+numberOfVisitted++;localStorage.setItem(NUMBER_OF_VISITTED_KEY,numberOfVisitted);var isShortWindowsHeight=false
+var isInMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);var isIniOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;var isInChrome=/Chrome/.test(navigator.userAgent)&&/Google Inc/.test(navigator.vendor);var ua=navigator.userAgent.toLowerCase();var isInAndroid=ua.indexOf("android")>-1;var isInFirefox=ua.indexOf("firefox")>-1;if(isInMobile&&isIniOS){$("#modal-footer-fk").show();}
+$('input').keyup(function(event){if(event.which===13){$(this).blur();}});$('#list-font-preview-container input:text').click(function(){document.execCommand('selectAll',false,null);});imageUrlPath='images/copy_paste_keyboard.png';function getParameterByName(name,url){if(!url)url=window.location.href;name=name.replace(/[\[\]]/g,"\\$&");var regex=new RegExp("[?&]"+name+"(=([^&#]*)|&|#|$)"),results=regex.exec(url);if(!results)return null;if(!results[2])return '';return decodeURIComponent(results[2].replace(/\+/g," "));}
+function getWholeChar(str,i){var code=str.charCodeAt(i);if(Number.isNaN(code)){return '';}
+if(code<0xD800||code>0xDFFF){return str.charAt(i);}
+if(0xD800<=code&&code<=0xDBFF){if(str.length<=(i+1)){throw 'High surrogate without following low surrogate';}
+var next=str.charCodeAt(i+1);if(0xDC00>next||next>0xDFFF){throw 'High surrogate without following low surrogate';}
+return str.charAt(i)+str.charAt(i+1);}
+if(i===0){throw 'Low surrogate without preceding high surrogate';}
+var prev=str.charCodeAt(i-1);if(0xD800>prev||prev>0xDBFF){throw 'Low surrogate without preceding high surrogate';}
+return false;}
+function unicodeLength(str){return[...str].length;}
+$("#modal-footer-close").on("click",function(){$("#myModal").css("display","none");});function showCopyingModalDialog(theText){var firstChar=getWholeChar(theText,0);var firstCharLength=firstChar.length;if(firstCharLength==1){var secondChar=getWholeChar(theText,1);if(secondChar.length>firstCharLength)
+firstCharLength=secondChar.length;}
+if($(window).height()<700){isShortWindowsHeight=true;}
+var cutOffWordLengthInMobile=55;if(isShortWindowsHeight){cutOffWordLengthInMobile=33}
+if(isInMobile){if(unicodeLength(theText)>cutOffWordLengthInMobile){var lastCharIndex=(cutOffWordLengthInMobile-3)*firstCharLength;if(getWholeChar(theText,lastCharIndex)==false)
+lastCharIndex--;theText=theText.substring(0,lastCharIndex)+"...";}}
+else{if(unicodeLength(theText)>75){var lastCharIndex=72*firstCharLength;if(getWholeChar(theText,lastCharIndex)==false)
+lastCharIndex--;theText=theText.substring(0,lastCharIndex)+"...";}}
+$("#myModal").css("display","block");$("#myModal").css("position","fixed");$("#myModal").css("visibility","visible");var theHTML="<div><span class='the_copied_text'>"+theText+"</span></div><div><span class='the_copied_text_description'> has been <span class='emphasis'>copied</span>. Please paste anywhere! ";if(isInMobile){if(isIniOS){theHTML+="<span class='ask_to_try_FK'>And then get <a href='https://itunes.apple.com/app/id1513702538'>Fonts Keyboard</a></a> app.</span></span></div>";}}
+$("#modal_header").html(theHTML);}
